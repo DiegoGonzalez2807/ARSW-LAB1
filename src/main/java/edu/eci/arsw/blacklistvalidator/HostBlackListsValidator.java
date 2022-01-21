@@ -6,6 +6,8 @@
 package edu.eci.arsw.blacklistvalidator;
 
 import edu.eci.arsw.spamkeywordsdatasource.HostBlacklistsDataSourceFacade;
+import edu.eci.arsw.threads.blackListThread;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -18,6 +20,8 @@ import java.util.logging.Logger;
 public class HostBlackListsValidator {
 
     private static final int BLACK_LIST_ALARM_COUNT=5;
+    
+    
     
     /**
      * Check the given host's IP address in all the available black lists,
@@ -62,6 +66,64 @@ public class HostBlackListsValidator {
         return blackListOcurrences;
     }
     
+    /**
+     * Segunda version del metodo CheckHost donde ahora le daremos la cantidad de hilos para 
+     * procesar la busqueda de la direccion.
+     * @param ipaddress
+     * @param N
+     * @return 
+     */
+     public List<Integer> checkHost(String ipaddress,int N){
+         LinkedList<Integer> blackListOcurrences=new LinkedList<>();
+        
+        int ocurrencesCount=0;
+        
+        ArrayList<blackListThread> blackThread = new ArrayList<blackListThread>();
+        
+        HostBlacklistsDataSourceFacade skds=HostBlacklistsDataSourceFacade.getInstance();
+        
+        int checkedListsCount=0;
+        
+        ArrayList<blackListThread> blackThreads;
+     
+        int secciones = skds.getRegisteredServersCount()/N;
+        
+        /**Creacion de hilos con sus respectivos parametros*/
+        for(int i = 0; i< secciones;i++){
+            if(i<secciones){
+                blackThread.add(new blackListThread((i*secciones),((i+1)*secciones)-1,ipaddress,skds));
+            }
+            else if(secciones == N && skds.getRegisteredServersCount()%N != 0){
+                 blackThread.add(new blackListThread((i*secciones),skds.getRegisteredServersCount(),ipaddress,skds));
+            }
+            blackThread.get(i).start();
+        }
+        /**Sumatoria de vistas de la direccion en listas negras*/
+        for(blackListThread thread:blackThread){
+            /**En caso que este vivo el hilo, que siga buscando la direccion*/
+            while(thread.isAlive()){
+                continue;
+            }
+            /**Cuando el hilo ya haya terminado, retorne cuantas veces encontró la direccion en listas negras y cuantas listas
+             reviso*/
+            ocurrencesCount += thread.malwareFounded();
+            blackListOcurrences.addAll(thread.getBlackListOcurrence());
+            checkedListsCount += thread.getListCount();
+        }
+      if (ocurrencesCount>=BLACK_LIST_ALARM_COUNT){
+            skds.reportAsNotTrustworthy(ipaddress);
+        }
+        else{
+            skds.reportAsTrustworthy(ipaddress);
+        }                
+        
+        LOG.log(Level.INFO, "Checked Black Lists:{0} of {1}", new Object[]{checkedListsCount, skds.getRegisteredServersCount()});
+        
+        return blackListOcurrences;
+    }
+     
+     
+      
     
     private static final Logger LOG = Logger.getLogger(HostBlackListsValidator.class.getName());
     
