@@ -89,7 +89,8 @@ Con lo anterior, y con los tiempos de ejecución dados, haga una gráfica de tie
 2. Cómo se comporta la solución usando tantos hilos de procesamiento como núcleos comparado con el resultado de usar el doble de éste?.  
 	En el caso de número igual de hilos que de nucleos, se observa un buen rendimiento, sin embargo cuando son el doble de hilos, se observa un mejor rendimiento, en este caso hay una reduccion de casi la mitad del tiempo.	
 
-3. De acuerdo con lo anterior, si para este problema en lugar de 100 hilos en una sola CPU se pudiera usar 1 hilo en cada una de 100 máquinas hipotéticas, la ley de Amdahls se aplicaría mejor?. Si en lugar de esto se usaran c hilos en 100/c máquinas distribuidas (siendo c es el número de núcleos de dichas máquinas), se mejoraría?. Explique su respuesta.
+3. De acuerdo con lo anterior, si para este problema en lugar de 100 hilos en una sola CPU se pudiera usar 1 hilo en cada una de 100 máquinas hipotéticas, la ley de Amdahls se aplicaría mejor?. Si en lugar de esto se usaran c hilos en 100/c máquinas distribuidas (siendo c es el número de núcleos de dichas máquinas), se mejoraría?. Explique su respuesta.  
+	Si mejoraria puesto que se distribuye un solo trabajo en distintas maquinas, en este caso el rendimiento mejora, puesto que los recursos de las maquinas no se reparten, cada maquina tiene sus recursos.
 
 
 
