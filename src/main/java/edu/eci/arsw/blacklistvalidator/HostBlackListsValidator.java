@@ -89,11 +89,11 @@ public class HostBlackListsValidator {
         int secciones = skds.getRegisteredServersCount()/N;
         
         /**Creacion de hilos con sus respectivos parametros*/
-        for(int i = 0; i< secciones;i++){
-            if(i<secciones){
+        for(int i = 0; i< N;i++){
+            if(i<N-1){
                 blackThread.add(new blackListThread((i*secciones),((i+1)*secciones)-1,ipaddress,skds));
             }
-            else if(secciones == N && skds.getRegisteredServersCount()%N != 0){
+            else if(i == N-1 ){
                  blackThread.add(new blackListThread((i*secciones),skds.getRegisteredServersCount(),ipaddress,skds));
             }
             blackThread.get(i).start();
