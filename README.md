@@ -19,8 +19,11 @@
 2. Complete el método __main__ de la clase CountMainThreads para que:
 	1. Cree 3 hilos de tipo CountThread, asignándole al primero el intervalo [0..99], al segundo [99..199], y al tercero [200..299].
 	2. Inicie los tres hilos con 'start()'.
-	3. Ejecute y revise la salida por pantalla. 
-	4. Cambie el incio con 'start()' por 'run()'. Cómo cambia la salida?, por qué?.
+	3. Ejecute y revise la salida por pantalla.  
+		![Salida Start](https://github.com/DiegoGonzalez2807/ARSW-LAB1/blob/master/img/start.jpg)  
+	5. Cambie el incio con 'start()' por 'run()'. Cómo cambia la salida?, por qué?.  
+		![Salida run](https://github.com/DiegoGonzalez2807/ARSW-LAB1/blob/master/img/run.jpg)  
+		La salida cambia puesto que cuando se ejecutan los hilos a traves de ```start()``` en el orden en que se corre el codigo. En cambio, cuando se ejecuta ```run()``` , se crea un hilo que ejecute el proceso designado, en este caso no se realiza en orden, sino que de acuerdo a un tiempo de espera aleatorio. Luego el cambio que se nota es el orden de los números como se muestra en pantalla, en caso de ```run()``` se muestran en orden de 0 a 200, en cambio en ```start()``` los números se muestran en desorden, dependiendo de que hilo se ejecute primero.
 
 **Parte II - Ejercicio Black List Search**
 
@@ -74,14 +77,17 @@ A partir de lo anterior, implemente la siguiente secuencia de experimentos para 
 Al iniciar el programa ejecute el monitor jVisualVM, y a medida que corran las pruebas, revise y anote el consumo de CPU y de memoria en cada caso. ![](img/jvisualvm.png)
 
 Con lo anterior, y con los tiempos de ejecución dados, haga una gráfica de tiempo de solución vs. número de hilos. Analice y plantee hipótesis con su compañero para las siguientes preguntas (puede tener en cuenta lo reportado por jVisualVM):
+![Hilos contra Tiempo](https://github.com/DiegoGonzalez2807/ARSW-LAB1/blob/master/img/TiempoHilos.jpeg)  
 
 **Parte IV - Ejercicio Black List Search**
 
 1. Según la [ley de Amdahls](https://www.pugetsystems.com/labs/articles/Estimating-CPU-Performance-using-Amdahls-Law-619/#WhatisAmdahlsLaw?):
 
-	![](img/ahmdahls.png), donde _S(n)_ es el mejoramiento teórico del desempeño, _P_ la fracción paralelizable del algoritmo, y _n_ el número de hilos, a mayor _n_, mayor debería ser dicha mejora. Por qué el mejor desempeño no se logra con los 500 hilos?, cómo se compara este desempeño cuando se usan 200?. 
+	![](img/ahmdahls.png), donde _S(n)_ es el mejoramiento teórico del desempeño, _P_ la fracción paralelizable del algoritmo, y _n_ el número de hilos, a mayor _n_, mayor debería ser dicha mejora. Por qué el mejor desempeño no se logra con los 500 hilos?, cómo se compara este desempeño cuando se usan 200?.  
+	El mejor desempeño no se logra por el mayor número de hilos, en este caso cuando llegamos a 500 hilos, el desempeño del algoritmo se reduce, pues tiene mayor desempeño con 200 hilos que con 500. Esto sucede porque ya son demasiados hilos, los que tiene que esperar el programa para terminar su proceso.
 
-2. Cómo se comporta la solución usando tantos hilos de procesamiento como núcleos comparado con el resultado de usar el doble de éste?.
+2. Cómo se comporta la solución usando tantos hilos de procesamiento como núcleos comparado con el resultado de usar el doble de éste?.  
+	En el caso de número igual de hilos que de nucleos, se observa un buen rendimiento, sin embargo cuando son el doble de hilos, se observa un mejor rendimiento, en este caso hay una reduccion de casi la mitad del tiempo.	
 
 3. De acuerdo con lo anterior, si para este problema en lugar de 100 hilos en una sola CPU se pudiera usar 1 hilo en cada una de 100 máquinas hipotéticas, la ley de Amdahls se aplicaría mejor?. Si en lugar de esto se usaran c hilos en 100/c máquinas distribuidas (siendo c es el número de núcleos de dichas máquinas), se mejoraría?. Explique su respuesta.
 
